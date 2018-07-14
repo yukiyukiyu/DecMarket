@@ -1,2 +1,2 @@
 # DecMarket
-A flea market based on java and SSH.
+A flea market based on java and SSM.
