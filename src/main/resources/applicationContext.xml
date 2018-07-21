@@ -45,12 +45,17 @@
         <property name="typeAliasesPackage" value="com.yuki.decmarket.model"/>
         <property name="configLocation" value="classpath:mybatisConfig.xml"/>
         <property name="mapperLocations"
-                  value="classpath:com.yuki.decmarket.mapper/*.xml"/>
+                  value="classpath:mapper/*.xml"/>
     </bean>
 
     <!-- scan for mappers and let them be autowired -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.yuki.decmarket.mapper" />
+        <property name="basePackage" value="com.yuki.decmarket.mapper"/>
+    </bean>
+
+    <bean class="org.dozer.spring.DozerBeanMapperFactoryBean">
+        <property name="mappingFiles"
+                  value="classpath*:dozer/dozer-mapper.xml"/>
     </bean>
 
 </beans>
