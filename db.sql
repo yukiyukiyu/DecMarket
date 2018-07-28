@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users
 (
   id        int           NOT NULL  AUTO_INCREMENT,
-  privilege tinyint(4)    NOT NULL,
+  privilege tinyint(4)    NOT NULL  DEFAULT 0,
   username  varchar(64)   NOT NULL  UNIQUE,
   password  varchar(255)  NOT NULL,
   tel       varchar(100)  NOT NULL  UNIQUE,

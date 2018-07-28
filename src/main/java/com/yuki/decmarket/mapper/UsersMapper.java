@@ -94,9 +94,12 @@ public interface UsersMapper {
 	 */
 	int updateByPrimaryKey(Users record);
 
+	/**
+	 * something add
+	 */
 	Users getUserByID(int uid);
 
-	Users getUserByUsrname(String username);
+	Users getUserByUsername(String username);
 
 	List<Users> getUserList();
 }

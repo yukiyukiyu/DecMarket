@@ -1,5 +1,10 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+
+<%
+    response.setStatus(response.SC_MOVED_TEMPORARILY);
+    response.setHeader("Location", "/index");
+%>
+
 </body>
 </html>

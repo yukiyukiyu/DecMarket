@@ -2,6 +2,7 @@ package com.yuki.decmarket.service;
 
 import com.yuki.decmarket.mapper.UsersMapper;
 import com.yuki.decmarket.model.Users;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+	@Autowired
 	private UsersMapper usersMapper;
 
 	public Users getUserByID(int uid) {
@@ -17,7 +19,7 @@ public class UserService {
 	}
 
 	public Users getUserByUsername(String username) {
-		return usersMapper.getUserByUsrname(username);
+		return usersMapper.getUserByUsername(username);
 	}
 
 	public List<Users> getUserList() {
