@@ -47,11 +47,11 @@
     <div class="row">
         <div class="col-md-8 col-lg-9 d-none d-md-block">
             <a href="${pageContext.request.contextPath}/index">
-                <img src="../../resources/img/logo-20171007.png"/>
+                <img src="${pageContext.request.contextPath}/resources/img/logo-20171007.png"/>
             </a>
         </div>
         <div class="col col-md-4 col-lg-3 ml-auto">
-            <img src="../../resources/img/icon.png" class="banner-icon"/>
+            <img src="${pageContext.request.contextPath}/resources/img/icon.png" class="banner-icon"/>
             <form action="${pageContext.request.contextPath}/good" method="GET">
             <div class="input-group">
                 <input class="form-control" name="query" id="searchq" placeholder="开始交易吧( '﹃'⑉)"/>
