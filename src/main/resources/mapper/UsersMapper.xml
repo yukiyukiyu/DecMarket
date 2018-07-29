@@ -363,15 +363,17 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="getUserByID" parameterType="int" resultType="Users">
-        SELECT * FROM users WHERE id = #{uid}
+    <select id="getUserByID" parameterType="int"
+            resultType="com.yuki.decmarket.model.Users">
+        SELECT * FROM users WHERE id = #{user_id}
     </select>
 
-    <select id="getUserByUsername" parameterType="string" resultType="Users">
+    <select id="getUserByUsername" parameterType="int"
+            resultType="com.yuki.decmarket.model.Users">
         SELECT * FROM users WHERE username = #{username}
     </select>
 
-    <select id="getUserList" resultType="Users">
+    <select id="getUserList" resultType="com.yuki.decmarket.model.Users">
         SELECT * FROM users
     </select>
 

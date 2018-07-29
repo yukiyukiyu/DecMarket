@@ -117,4 +117,8 @@ public interface GoodsMapper {
      * @mbggenerated Mon Jul 16 16:46:29 CST 2018
      */
     int updateByPrimaryKey(Goods record);
+
+    Goods getGoodByID(int good_id);
+
+    List<Goods> getAllGoods();
 }

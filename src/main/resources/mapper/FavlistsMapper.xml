@@ -283,4 +283,9 @@
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="getFavListByUserID" parameterType="int"
+            resultType="com.yuki.decmarket.model.Favlists">
+        SELECT * FROM favlists WHERE user_id = #{user_id} ORDER BY id DESC
+    </select>
 </mapper>

@@ -97,7 +97,7 @@ public interface UsersMapper {
 	/**
 	 * something add
 	 */
-	Users getUserByID(int uid);
+	Users getUserByID(int user_id);
 
 	Users getUserByUsername(String username);
 

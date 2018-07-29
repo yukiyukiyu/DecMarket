@@ -63,7 +63,7 @@ public class UserForm {
 	private String password;
 
 	@NotNull
-	@Size.List({@Size(min = 1, max = 25, groups = NewUser.class),
+	@Size.List({@Size(min = 1, max = 50, groups = NewUser.class),
 			@Size(min = 0, max = 50, groups = EditUser.class)})
 	private String repassword;
 

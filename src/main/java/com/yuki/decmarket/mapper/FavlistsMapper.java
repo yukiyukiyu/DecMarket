@@ -93,4 +93,6 @@ public interface FavlistsMapper {
      * @mbggenerated Mon Jul 16 16:46:29 CST 2018
      */
     int updateByPrimaryKey(Favlists record);
+
+    List<Favlists> getFavListByUserID(int user_id);
 }
