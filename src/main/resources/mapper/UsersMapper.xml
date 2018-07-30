@@ -368,7 +368,7 @@
         SELECT * FROM users WHERE id = #{user_id}
     </select>
 
-    <select id="getUserByUsername" parameterType="int"
+    <select id="getUserByUsername" parameterType="string"
             resultType="com.yuki.decmarket.model.Users">
         SELECT * FROM users WHERE username = #{username}
     </select>

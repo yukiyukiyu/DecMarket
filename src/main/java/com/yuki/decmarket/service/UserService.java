@@ -1,9 +1,11 @@
 package com.yuki.decmarket.service;
 
 import com.yuki.decmarket.mapper.FavlistsMapper;
+import com.yuki.decmarket.mapper.TransactionsMapper;
 import com.yuki.decmarket.mapper.UserInfoMapper;
 import com.yuki.decmarket.mapper.UsersMapper;
 import com.yuki.decmarket.model.Favlists;
+import com.yuki.decmarket.model.Transactions;
 import com.yuki.decmarket.model.UserInfo;
 import com.yuki.decmarket.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class UserService {
 
 	@Autowired
 	private FavlistsMapper favlistsMapper;
+
+	private TransactionsMapper transactionsMapper;
 
 	public Users getUserByID(int user_id) {
 		return usersMapper.getUserByID(user_id);
@@ -55,5 +59,9 @@ public class UserService {
 
 	public List<Favlists> getFavListByID(int user_id) {
 		return favlistsMapper.getFavListByUserID(user_id);
+	}
+
+	public List<Transactions> getTransByBuyerID(int buyer_id) {
+			return transactionsMapper.getTransByBuyerID(buyer_id);
 	}
 }

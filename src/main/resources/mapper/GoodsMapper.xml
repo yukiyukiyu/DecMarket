@@ -402,12 +402,16 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="getGoodByID" parameterType="int"
+    <select id="getGoodByUserID" parameterType="int"
             resultType="com.yuki.decmarket.model.Goods">
-        SELECT * FROM goods WHERE id = #{good_id}
+        SELECT * FROM goods WHERE user_id = #{user_id}
     </select>
 
     <select id="getAllGoods" resultType="com.yuki.decmarket.model.Goods">
         SELECT * FROM goods
     </select>
+
+    <update id="deleteGoodByID" parameterType="int">
+        UPDATE goods SET delete_at = CURRENT_TIMESTAMP WHERE id = #{good_id}
+    </update>
 </mapper>

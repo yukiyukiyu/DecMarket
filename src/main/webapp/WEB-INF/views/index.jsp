@@ -4,9 +4,15 @@
 <html>
 <head>
     <%@include file="layout/basic.jsp"%>
+    <title>首页</title>
 </head>
 
 <body>
 <%@include file="layout/header.jsp"%>
+
+<div class="container">
+</div>
+
+<%@include file="layout/footer.jsp"%>
 </body>
 </html>

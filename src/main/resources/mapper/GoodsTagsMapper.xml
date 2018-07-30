@@ -268,4 +268,9 @@
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="getRecordByGoodID" parameterType="int"
+            resultType="com.yuki.decmarket.model.GoodsTags">
+        SELECT * FROM goods_tags WHERE good_id = #{good_id}
+    </select>
 </mapper>

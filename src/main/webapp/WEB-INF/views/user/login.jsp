@@ -11,7 +11,7 @@
 
 <div class="container">
 
-<form method="POST" action="${pageContext.request.contextPath}/user/register">
+<form method="POST" action="${pageContext.request.contextPath}/user/login">
     <div>
         <label>用户名：</label>
         <input type="text" id="username" name="username" placeholder="用户名"
@@ -26,25 +26,7 @@
                placeholder="密码" required="true"/>
     </div>
     <div>
-        <label>确认密码：</label>
-        <input type="password" name="repassword" id="repassword"
-               placeholder="确认密码"/>
-        <c:if test="${not empty diffPassword}">
-            <span class="error">${diffPassword}</span>
-        </c:if>
-    </div>
-    <div>
-        <label>手机号：</label>
-        <input type="text" id="tel" name="tel" placeholder="手机号"
-               required="true"/>
-    </div>
-    <div>
-        <label>邮箱</label>
-        <input type="text" id="email" name="email" placeholder="邮箱"
-               required="true"/>
-    </div>
-    <div>
-        <button class="btn" type="submit">注册</button>
+        <button class="btn" type="submit">登录</button>
     </div>
 </form>
 

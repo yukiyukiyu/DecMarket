@@ -93,4 +93,6 @@ public interface TagsMapper {
      * @mbggenerated Mon Jul 16 16:46:29 CST 2018
      */
     int updateByPrimaryKey(Tags record);
+
+    Tags getTagByName(String name);
 }

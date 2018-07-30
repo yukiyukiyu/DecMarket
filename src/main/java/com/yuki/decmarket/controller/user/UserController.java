@@ -1,9 +1,6 @@
 package com.yuki.decmarket.controller.user;
 
-import com.yuki.decmarket.model.Favlists;
-import com.yuki.decmarket.model.Goods;
-import com.yuki.decmarket.model.UserInfo;
-import com.yuki.decmarket.model.Users;
+import com.yuki.decmarket.model.*;
 import com.yuki.decmarket.service.GoodService;
 import com.yuki.decmarket.service.UserService;
 import org.mindrot.jbcrypt.BCrypt;
@@ -38,6 +35,9 @@ public class UserController {
 	@Autowired
 	protected UserService userService;
 
+	@Autowired
+	protected GoodService goodService;
+
 	@ModelAttribute
 	public UserForm setUpUserForm() {
 		return new UserForm();
@@ -46,6 +46,11 @@ public class UserController {
 	@ModelAttribute
 	public UserInfoForm setUpUserInfoForm() {
 		return new UserInfoForm();
+	}
+
+	@RequestMapping(value = "/registerForm", method = RequestMethod.GET)
+	public String registerForm() {
+		return "/user/register";
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -69,8 +74,15 @@ public class UserController {
 		String bcryptPasswd = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
 		newUser.setPassword(bcryptPasswd);
 		newUser.setPrivilege((byte) 0);
+		newUser.setBaned(false);
 		userService.register(newUser);
+		modelMap.addAttribute("registerOK", "注册成功，请登录。");
 		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/loginForm", method = RequestMethod.GET)
+	public String loginForm() {
+		return "/user/login";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -83,13 +95,20 @@ public class UserController {
 		if (user == null) {
 			modelMap.addAttribute("invalidUser", "用户名不存在！");
 			return "/user/login";
+		} else if (user.getBaned() != null && user.getBaned()) {
+			modelMap.addAttribute("banedUser",
+					"您的账号由于某些违规操作已被管理员封禁！");
+			return "redirect:/";
 		} else {
 			if (BCrypt.checkpw(password, user.getPassword())) {
 				request.getSession(true).setAttribute("user_id", user.getId());
 				request.getSession(true).setAttribute("is_admin", user.getPrivilege());
 				request.getSession(true).setAttribute("username", user.getUsername());
-				request.getSession(true).setAttribute("nickname",
-						userService.getUserInfoByID(user.getId()).getNickname());
+
+				if (userService.getUserInfoByID(user.getId()) != null)
+					request.getSession(true).setAttribute("nickname",
+							userService.getUserInfoByID(user.getId()).getNickname());
+
 				return "redirect:/";
 			} else {
 				modelMap.addAttribute("error", "密码错误！");
@@ -130,7 +149,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{user_id}/profile", method = RequestMethod.GET)
-	public String getProfile(@PathVariable("user_id") Integer user_id, HttpServletRequest request, ModelMap modelMap) {
+	public String getProfile(@PathVariable("user_id") int user_id, HttpServletRequest request, ModelMap modelMap) {
 		Users user = userService.getUserByID(user_id);
 		UserInfo userInfo = userService.getUserInfoByID(user_id);
 
@@ -165,13 +184,33 @@ public class UserController {
 		return "redirect:/user/" + user_id + "/profile";
 	}
 
+	@RequestMapping(value = "/trans", method = RequestMethod.GET)
+	public String getMyTrans(HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		List<Transactions> trans = userService.getTransByBuyerID(user_id);
+		request.setAttribute("trans", trans);
+
+		List<Goods> goods  = new ArrayList<>();
+		for(Transactions it : trans) {
+			goods.add(goodService.getGoodByID(it.getGoodId()));
+		}
+		request.setAttribute("goods", goods);
+		return "/user/trans";
+	}
+
+	@RequestMapping(value = "/{user_id}/sell", method = RequestMethod.GET)
+	public String getMySells(@PathVariable("user_id") int user_id, HttpServletRequest request) {
+		List<Goods> goods = goodService.getGoodByUserID(user_id);
+		request.setAttribute("goods", goods);
+		return "/user/sell";
+	}
+
 	@RequestMapping(value = "/getFavList", method = RequestMethod.GET)
 	public String getFavList(HttpServletRequest request) {
 		int user_id = (int) request.getSession().getAttribute("user_id");
 		List<Favlists> favlist = userService.getFavListByID(user_id);
 		List<Goods> goodsList = new ArrayList<>();
-		GoodService goodService = new GoodService();
-		for(Favlists it : favlist) {
+		for (Favlists it : favlist) {
 			goodsList.add(goodService.getGoodByID(it.getGoodId()));
 		}
 		request.setAttribute("favlist", goodsList);

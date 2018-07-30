@@ -118,7 +118,9 @@ public interface GoodsMapper {
      */
     int updateByPrimaryKey(Goods record);
 
-    Goods getGoodByID(int good_id);
+    List<Goods> getGoodByUserID(int user_id);
 
     List<Goods> getAllGoods();
+
+    void deleteGoodByID(int good_id);
 }

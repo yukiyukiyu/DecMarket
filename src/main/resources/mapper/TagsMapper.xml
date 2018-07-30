@@ -253,4 +253,9 @@
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getTagByName" parameterType="string"
+          resultType="com.yuki.decmarket.model.Tags">
+      SELECT * FROM tags WHERE name = #{name}
+  </select>
 </mapper>

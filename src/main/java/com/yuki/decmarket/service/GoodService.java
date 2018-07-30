@@ -13,10 +13,22 @@ public class GoodService {
 	private GoodsMapper goodsMapper;
 
 	public Goods getGoodByID(int good_id) {
-		return goodsMapper.getGoodByID(good_id);
+		return goodsMapper.selectByPrimaryKey(good_id);
+	}
+
+	public List<Goods> getGoodByUserID(int user_id) {
+		return goodsMapper.getGoodByUserID(user_id);
 	}
 
 	public List<Goods> getAllGoods() {
 		return goodsMapper.getAllGoods();
+	}
+
+	public void addGood(Goods good) {
+		goodsMapper.insert(good);
+	}
+
+	public void deleteGoodByID(int good_id) {
+		goodsMapper.deleteGoodByID(good_id);
 	}
 }

@@ -93,4 +93,6 @@ public interface GoodsTagsMapper {
      * @mbggenerated Mon Jul 16 16:46:29 CST 2018
      */
     int updateByPrimaryKey(GoodsTags record);
+
+    List<GoodsTags> getRecordByGoodID(int good_id);
 }
