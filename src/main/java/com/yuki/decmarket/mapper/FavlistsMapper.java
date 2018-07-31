@@ -95,4 +95,6 @@ public interface FavlistsMapper {
     int updateByPrimaryKey(Favlists record);
 
     List<Favlists> getFavListByUserID(int user_id);
+
+    int findFavListByID(int user_id, int good_id);
 }

@@ -10,10 +10,7 @@ import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import com.yuki.decmarket.controller.good.GoodForm.NewGood;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +43,6 @@ public class GoodController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAllGoods(HttpServletRequest request) {
 		List<Goods> goods = goodService.getAllGoods();
-		System.out.println(goods);
 		request.setAttribute("goods", goods);
 		return "/good/goodList";
 	}
@@ -55,21 +51,22 @@ public class GoodController {
 	public String showGood(@PathVariable("good_id") int good_id, HttpServletRequest request,
 	                       ModelMap modelMap) {
 		Goods good = goodService.getGoodByID(good_id);
-		if(good.getDeletedAt() != null) {
+		if(good.getDeleted_at() != null) {
 			modelMap.addAttribute("deletedGood", "此商品已被删除！");
+			return "good/goodInfo";
 		} else {
 			request.setAttribute("good", good);
 
 			List<GoodsTags> record = goodTagService.getRecordByGoodID(good_id);
 			List<Tags> tags = new ArrayList<>();
 			for(GoodsTags it : record) {
-				Tags tag = goodTagService.getTagByID(it.getTagId());
+				Tags tag = goodTagService.getTagByID(it.getTag_id());
 				tags.add(tag);
 			}
 			request.setAttribute("tags", tags);
 		}
 
-		Users seller = userService.getUserByID(good.getUserId());
+		Users seller = userService.getUserByID(good.getUser_id());
 		request.setAttribute("seller", seller);
 
 		UserInfo sellerInfo = userService.getUserInfoByID(seller.getId());
@@ -79,8 +76,10 @@ public class GoodController {
 			int user_id = (int) request.getSession().getAttribute("user_id");
 			List<Favlists> favlists = userService.getFavListByID(user_id);
 			for(Favlists it : favlists) {
-				if(it.getGoodId() == good_id) {
-					modelMap.addAttribute("isInFavList", "已收藏");
+				System.out.println(it.getGood_id());
+				if(it.getGood_id() != null && it.getGood_id() == good_id) {
+					System.out.println("???");
+					modelMap.addAttribute("isInFavList", 1);
 					break;
 				}
 			}
@@ -99,9 +98,9 @@ public class GoodController {
 		int user_id = (int) request.getSession().getAttribute("user_id");
 		Users user = userService.getUserByID(user_id);
 		Goods newgood = beanMapper.map(form, Goods.class);
-		newgood.setUserId(user_id);
+		newgood.setUser_id(user_id);
 		goodService.addGood(newgood);
-		return "redirect:/good/" + user_id + "/sell";
+		return "redirect:/good/" + newgood.getId();
 	}
 
 	@RequestMapping(value = "/{good_id}/delete", method = RequestMethod.POST)
@@ -133,10 +132,51 @@ public class GoodController {
 		}
 		for(int it : tagIDList) {
 			GoodsTags record = new GoodsTags();
-			record.setGoodId(good_id);
-			record.setTagId(it);
+			record.setGood_id(good_id);
+			record.setTag_id(it);
 			goodTagService.addRecord(record);
 		}
 		return "redirect:/good/" + good_id;
+	}
+
+	@RequestMapping(value = "/{good_id}/addFavList", method = RequestMethod.POST)
+	public String addFavList(@PathVariable("good_id") int good_id,
+	                         HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		Favlists favlist = new Favlists();
+		favlist.setGood_id(good_id);
+		favlist.setUser_id(user_id);
+		goodService.addFavList(favlist);
+		return "redirect:/good/" + good_id;
+	}
+
+	@RequestMapping(value = "/{good_id}/delFavList", method = RequestMethod.POST)
+	public String delFavList(@PathVariable("good_id") int good_id,
+	                         HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		List<Favlists> favlists = userService.getFavListByID(user_id);
+		for(Favlists it : favlists) {
+			if(it.getGood_id() == good_id) {
+				goodService.delFavList(it.getId());
+			}
+		}
+		return "redirect:/good/" + good_id;
+	}
+
+	@RequestMapping(value = "/{good_id}/buy", method = RequestMethod.POST)
+	public String buy(@PathVariable("good_id") int good_id,
+	                  HttpServletRequest request) {
+		int buyer_id = (int) request.getSession().getAttribute("user_id");
+		Transactions transaction = new Transactions();
+		transaction.setGood_id(good_id);
+		transaction.setBuyer_id(buyer_id);
+		transaction.setNumber(Integer.parseInt(request.getParameter("count")));
+		transaction.setStatus((short) 1);
+		goodService.addTrans(transaction);
+
+		Goods good = goodService.getGoodByID(good_id);
+		good.setCount(good.getCount() - transaction.getNumber());
+		goodService.updateGood(good);
+		return "redirect:/user/trans";
 	}
 }

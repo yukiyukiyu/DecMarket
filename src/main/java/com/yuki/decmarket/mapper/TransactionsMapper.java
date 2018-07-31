@@ -118,5 +118,7 @@ public interface TransactionsMapper {
      */
     int updateByPrimaryKey(Transactions record);
 
-    List<Transactions> getTransByBuyerID(int user_id);
+    List<Transactions> getTransByBuyerID(int buyer_id);
+
+    Transactions getTranByID(int tran_id);
 }

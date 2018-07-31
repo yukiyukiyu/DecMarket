@@ -164,7 +164,7 @@
         )
         values (#{id,jdbcType=INTEGER}, #{privilege,jdbcType=TINYINT}, #{username,jdbcType=VARCHAR},
         #{password,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
-        #{havecheckedemail,jdbcType=BIT}, #{baned,jdbcType=BIT}, #{createdAt,jdbcType=TIMESTAMP}
+        #{havecheckedemail,jdbcType=BIT}, #{baned,jdbcType=BIT}, #{created_at,jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -359,7 +359,7 @@
         email = #{email,jdbcType=VARCHAR},
         havecheckedemail = #{havecheckedemail,jdbcType=BIT},
         baned = #{baned,jdbcType=BIT},
-        created_at = #{createdAt,jdbcType=TIMESTAMP}
+        created_at = #{created_at,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

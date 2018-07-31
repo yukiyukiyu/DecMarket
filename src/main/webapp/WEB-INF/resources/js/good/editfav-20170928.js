@@ -28,7 +28,7 @@ function submitdel(){
         var str_data = str_data1 + '&_method=DELETE';
         $.ajax({
             type: "POST",
-            url: "/user/fav/del",
+            url: "/user/delFavList",
             data: str_data,
             success: function (msg) {
                 $(".cb").each(function () {

@@ -185,8 +185,8 @@
     -->
     insert into comments (id, user_id, trans_id, 
       created_at, content)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{transId,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+    values (#{id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{trans_id,jdbcType=INTEGER},
+      #{created_at,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yuki.decmarket.model.Comments" >
     <!--

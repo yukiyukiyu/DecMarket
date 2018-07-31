@@ -147,8 +147,8 @@
     -->
     insert into favlists (id, user_id, good_id, 
       seller_id, created_at)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodId,jdbcType=INTEGER}, 
-      #{sellerId,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP})
+    values (#{id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{good_id,jdbcType=INTEGER},
+      #{seller_id,jdbcType=INTEGER}, #{created_at,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yuki.decmarket.model.Favlists" >
     <!--
@@ -287,5 +287,10 @@
     <select id="getFavListByUserID" parameterType="int"
             resultType="com.yuki.decmarket.model.Favlists">
         SELECT * FROM favlists WHERE user_id = #{user_id} ORDER BY id DESC
+    </select>
+
+    <select id="findFavListByID" parameterType="int" resultType="int">
+        SELECT favlists.id FROM favlists WHERE user_id = #{user_id}
+          AND good_id = #{good_id}
     </select>
 </mapper>

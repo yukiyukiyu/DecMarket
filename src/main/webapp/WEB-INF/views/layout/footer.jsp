@@ -8,7 +8,7 @@
     <div class="row"><div class="mx-auto">当前处于调试模式</div></div>
     <div class="d-none d-md-flex row">
         <ul class="col-auto">
-            <li>© <jsp:useBean id="now" class="java.util.Date"/><fmt:formatDate value="${now}" pattern="yyyy"/> yuki@github</li>
+            <li>© <jsp:useBean id="now" class="java.util.Date"/><fmt:formatDate value="${now}" pattern="yyyy"/> <a href="https://github.com/yukiyukiyu">yuki@github</a></li>
             <li><a href="#">隐私政策</a></li>
             <li><a href="#">服务条款</a></li>
         </ul>
@@ -22,7 +22,7 @@
 
     <div class="d-md-none row">
         <ul class="col-auto mr-auto">
-            <li>© {{date("Y")}} <a href="https://github.com/yukiyukiyu">yuki@github</a>
+            <li>© <jsp:useBean id="time" class="java.util.Date"/><fmt:formatDate value="${time}" pattern="yyyy"/> <a href="https://github.com/yukiyukiyu">yuki@github</a>
             </li>
 
         </ul>

@@ -25,6 +25,7 @@ public class UserService {
 	@Autowired
 	private FavlistsMapper favlistsMapper;
 
+	@Autowired
 	private TransactionsMapper transactionsMapper;
 
 	public Users getUserByID(int user_id) {
@@ -50,7 +51,11 @@ public class UserService {
 	}
 
 	public UserInfo getUserInfoByID(int user_id) {
-		return userInfoMapper.selectByPrimaryKey(user_id);
+		return userInfoMapper.getUserInfoByUserID(user_id);
+	}
+
+	public void delUserInfoByID(int id) {
+		userInfoMapper.deleteByPrimaryKey(id);
 	}
 
 	public void editUserInfo(UserInfo userInfo) {
@@ -62,6 +67,28 @@ public class UserService {
 	}
 
 	public List<Transactions> getTransByBuyerID(int buyer_id) {
-			return transactionsMapper.getTransByBuyerID(buyer_id);
+		System.out.println(buyer_id);
+		return transactionsMapper.getTransByBuyerID(buyer_id);
 	}
+
+	public void createUserInfo(UserInfo userInfo) {
+		userInfoMapper.insert(userInfo);
+	}
+
+	public int findFavListByID(int user_id, int good_id) {
+		return favlistsMapper.findFavListByID(user_id, good_id);
+	}
+
+	public void delFavListByID(int id) {
+		favlistsMapper.deleteByPrimaryKey(id);
+	}
+
+	public Transactions getTranByID(int tran_id) {
+		return transactionsMapper.getTranByID(tran_id);
+	}
+
+	public void addTranComment(Transactions tran) {
+		transactionsMapper.updateByPrimaryKey(tran);
+	}
+
 }

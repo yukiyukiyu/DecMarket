@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </c:if>
-                <c:if test="${sessionScope.user_id != null && good.id != sessionScope.user_id}">
+                <c:if test="${sessionScope.user_id != null && good.user_id != sessionScope.user_id}">
                 <form action="${pageContext.request.contextPath}/good/${good.id}/buy" method="post">
                     <c:if test="${good.count > 1}">
                     <div class="input-group">
@@ -77,14 +77,14 @@
         <c:if test="${sessionScope.user_id != null}">
         <div class="row">
             <div class="col-auto mx-auto">
-                <c:if test="${good.userId == sessionScope.user_id || sessionScope.is_admin == 1}">
+                <c:if test="${good.user_id == sessionScope.user_id || sessionScope.is_admin >= 1}">
                 <div class="btn-group">
                     <form action="/good/${good.id}/edit">
                         <input type="submit" class="btn btn-primary" value="修改">
                     </form>
                 </div>
                 </c:if>
-                <c:if test="${sessionScope.is_admin == 1}">
+                <c:if test="${sessionScope.is_admin >= 1}">
                 <div class="btn-group">
                     <form action="/good/${good.id}/delete" method="POST" onsubmit="return confirm('确定删除吗？');">
                         <input type="submit" class="btn btn-danger" value="删除">
@@ -104,7 +104,7 @@
                         <tr>
                             <th>卖家</th>
                             <td>
-                                <a href="/user/${seller.id}">
+                                <a href="/user/${seller.id}/profile">
                                     <c:if test="${sellerInfo.nickname != null}">${sellerInfo.nickname}</c:if>
                                     <c:if test="${sellerInfo.nickname == null}">${seller.username}</c:if>
                                 </a>
@@ -124,21 +124,26 @@
                             <th>收藏</th>
                             <td>
                                 <c:if test="${sessionScope.user_id != null}">
-                                    <c:if test="${isInFavList == null}">
-                                    <button class="fa fa-star-o btn btn-primary btn-sm"
-                                            onclick="add_favlist()" data-toggle="tooltip" data-placement="top"
-                                            title="收藏OvO">
-                                    </button>
+                                    <c:if test="${isInFavList != 1}">
+                                    <form action="/good/${good.id}/addFavList" method="post">
+                                        <button class="fa fa-star-o btn btn-primary btn-sm" data-toggle="tooltip"
+                                                data-placement="top" title="收藏OvO">
+                                        </button>
+                                        <span>收藏OvO</span>
+                                    </form>
                                     </c:if>
-                                    <c:if test="${isInFavList != null}">
-                                    <button class="fa fa-star btn btn-primary btn-sm"
-                                            onclick="del_favlist()" data-toggle="tooltip" data-placement="top"
-                                            title="取消收藏QAQ"></button>
+                                    <c:if test="${isInFavList == 1}">
+                                    <form action="/good/${good.id}/delFavList" method="post">
+                                        <button class="fa fa-star btn btn-primary btn-sm" data-toggle="tooltip"
+                                                data-placement="top" title="取消收藏QAQ">
+                                        </button>
+                                        <span>取消收藏QAQ</span>
+                                    </form>
                                     </c:if>
                                 </c:if>
                                 <c:if test="${sessionScope.user_id == null}">
                                 <button class="fa fa-star-o btn btn-primary btn-sm"
-                                        onclick="window.location.href='/user/login'"
+                                        onclick="window.location.href='/user/loginForm'"
                                         data-toggle="tooltip" data-placement="top" title="收藏OvO">
                                 </button>
                                 </c:if>
@@ -146,7 +151,7 @@
                         </tr>
                         <tr>
                             <th>上架时间</th>
-                            <td>${good.createdAt}</td>
+                            <td>${good.created_at}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -155,45 +160,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    function add_favlist() {
-        var str_data = $("#fav input").map(function () {
-            return ($(this).attr("name") + '=' + $(this).val());
-        }).get().join("&");
-        $.ajax({
-            type: "POST",
-            url: "/good/${good.id}/addFavList",
-            data: str_data,
-            success: function (msg) {
-                $('.fa-star-o').attr('title','取消收藏QAQ');
-                $('.fa-star-o').attr('onclick', 'del_favlist()');
-                $('.fa-star-o').tooltip('dispose');
-                $('.fa-star-o').tooltip('show');
-                $('.fa-star-o').attr('class','fa fa-star btn btn-primary btn-sm');
-            }
-        });
-    }
-    function del_favlist() {
-        var str_data1 = $("#fav input").map(function () {
-            return ($(this).attr("name") + '=' + $(this).val());
-        }).get().join("&");
-        var str_data = str_data1 + '&_method=DELETE';
-        $.ajax({
-            type: "POST",
-            url: "/good/${good.id}/delFavList",
-            data: str_data,
-            success: function (msg) {
-                $('.fa-star').attr('title','收藏OvO');
-                $('.fa-star').attr('onclick', 'add_favlist()');
-                $('.fa-star').tooltip('dispose');
-                $('.fa-star').tooltip('show');
-                $('.fa-star').attr('class','fa fa-star-o btn btn-primary btn-sm');
-            }
-        });
-    }
-</script>
-
 </div>
 
 <%@include file="../layout/footer.jsp"%>

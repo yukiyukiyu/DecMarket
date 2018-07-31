@@ -90,8 +90,8 @@ CREATE TABLE favlists
 (
   id        int NOT NULL AUTO_INCREMENT,
   user_id   int NOT NULL,
-  good_id   int NOT NULL,
-  seller_id int NOT NULL,
+  good_id   int,
+  seller_id int,
   created_at  timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users (id)

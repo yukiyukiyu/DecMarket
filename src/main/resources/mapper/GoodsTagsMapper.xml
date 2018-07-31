@@ -146,8 +146,8 @@
     -->
     insert into goods_tags (id, good_id, tag_id, 
       created_at)
-    values (#{id,jdbcType=INTEGER}, #{goodId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP})
+    values (#{id,jdbcType=INTEGER}, #{good_id,jdbcType=INTEGER}, #{tag_id,jdbcType=INTEGER},
+      #{created_at,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yuki.decmarket.model.GoodsTags" >
     <!--

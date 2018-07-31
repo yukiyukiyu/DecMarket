@@ -123,4 +123,6 @@ public interface GoodsMapper {
     List<Goods> getAllGoods();
 
     void deleteGoodByID(int good_id);
+
+    Goods getGoodByID(int good_id);
 }

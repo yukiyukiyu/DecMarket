@@ -145,7 +145,7 @@
     -->
     insert into tags (id, name, created_at
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.yuki.decmarket.model.Tags" >

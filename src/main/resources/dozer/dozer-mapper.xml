@@ -9,4 +9,12 @@
             <b>username</b>
         </field-exclude>
     </mapping>
+    <mapping map-id="userInfoExcludeUserID">
+        <class-a>com.yuki.decmarket.controller.user.UserInfoForm</class-a>
+        <class-b>com.yuki.decmarket.model.UserInfo</class-b>
+        <field-exclude>
+            <a>user_id</a>
+            <b>user_id</b>
+        </field-exclude>
+    </mapping>
 </mappings>

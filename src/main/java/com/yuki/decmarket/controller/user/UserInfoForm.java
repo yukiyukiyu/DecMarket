@@ -26,12 +26,12 @@ public class UserInfoForm {
 		this.gender = gender;
 	}
 
-	public String getQq() {
-		return qq;
+	public String getQQ() {
+		return QQ;
 	}
 
-	public void setQq(String qq) {
-		this.qq = qq;
+	public void setQQ(String QQ) {
+		this.QQ = QQ;
 	}
 
 	public String getWechat() {
@@ -63,7 +63,7 @@ public class UserInfoForm {
 
 	private int gender;
 
-	private String qq;
+	private String QQ;
 
 	private String wechat;
 

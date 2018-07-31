@@ -26,6 +26,7 @@
                 </a>
                 <a href="${pageContext.request.contextPath}/user/logout" class="dropdown-item bg-danger text-light">登出</a>
                 <div class="dropdown-divider"></div>
+                <a href="${pageContext.request.contextPath}/user/userInfo" class="dropdown-item">个人中心</a>
                 <a href="${pageContext.request.contextPath}/user/getFavList" class="dropdown-item">收藏夹</a>
                 <a href="${pageContext.request.contextPath}/user/trans" class="dropdown-item">我的购买</a>
                 <a href="${pageContext.request.contextPath}/user/${sessionScope.user_id}/sell" class="dropdown-item">我的出售</a>
@@ -60,7 +61,7 @@
                         </c:if>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="${pageContext.request.contextPath}/user/${sessionScope.user_id}/profile" class="dropdown-item">个人中心</a>
+                        <a href="${pageContext.request.contextPath}/user/userInfo" class="dropdown-item">个人中心</a>
                         <a href="${pageContext.request.contextPath}/user/getFavList" class="dropdown-item">收藏夹</a>
                         <a href="${pageContext.request.contextPath}/user/trans" class="dropdown-item">我的购买</a>
                         <a href="${pageContext.request.contextPath}/user/${sessionScope.user_id}/sell" class="dropdown-item">我的出售</a>
@@ -106,3 +107,6 @@
         </li>
     </ul>
 </div>
+
+<p></p>
+<p></p>

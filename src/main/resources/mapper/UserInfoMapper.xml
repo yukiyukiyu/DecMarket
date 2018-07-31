@@ -190,9 +190,9 @@
     insert into user_info (id, user_id, nickname, 
       gender, QQ, wechat, address, 
       created_at, intro)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, 
-      #{gender,jdbcType=BIT}, #{qq,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{intro,jdbcType=LONGVARCHAR})
+    values (#{id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR},
+      #{gender,jdbcType=BIT}, #{QQ,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{created_at,jdbcType=TIMESTAMP}, #{intro,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yuki.decmarket.model.UserInfo" >
     <!--
@@ -409,13 +409,18 @@
       This element was generated on Mon Jul 16 16:46:29 CST 2018.
     -->
     update user_info
-    set user_id = #{userId,jdbcType=INTEGER},
+    set user_id = #{user_id,jdbcType=INTEGER},
       nickname = #{nickname,jdbcType=VARCHAR},
       gender = #{gender,jdbcType=BIT},
-      QQ = #{qq,jdbcType=VARCHAR},
+      QQ = #{QQ,jdbcType=VARCHAR},
       wechat = #{wechat,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP}
+      created_at = #{created_at,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="getUserInfoByUserID" parameterType="int"
+            resultType="com.yuki.decmarket.model.UserInfo">
+        SELECT * FROM user_info WHERE user_id = #{user_id}
+    </select>
 </mapper>
