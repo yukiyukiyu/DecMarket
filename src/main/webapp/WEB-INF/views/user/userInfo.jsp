@@ -81,7 +81,9 @@
 
             <div class="tab-pane" id="nickandhead" role="tabpanel">
                 <div id="profile">
-                    <form action="${pageContext.request.contextPath}/user/editAvatar" method="POST" enctype="multipart/form-data">
+                    <form id="avatar-form"
+                          action="${pageContext.request.contextPath}/user/editAvatar"
+                          method="POST">
 
                         <style>
                             .cropper-crop-box, .cropper-view-box {
@@ -110,6 +112,7 @@
                         <input id="avatarUploadCpHeight" type="hidden" name="crop_height">
                         <input id="avatarUploadCpX" type="hidden" name="crop_x">
                         <input id="avatarUploadCpY" type="hidden" name="crop_y">
+                        <input id="avatarBase64" type="hidden" name="avatar-base64">
                         <p>
                         <div class="row">
                             <div class="mx-auto">
@@ -119,7 +122,7 @@
                         </p>
                         <div class="row">
                             <div class="mx-auto">
-                                <input class="btn btn-success" type="submit" name="submit" value="保存">
+                                <input id="upload-avatar" type="button" class="btn btn-success" value="保存">
                             </div>
                         </div>
                     </form>

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-public class AvatarHelper {
+public class CoverHelper {
     public enum FileType {
         JPEG("FFD8FF"),
         PNG("89504E47"),
@@ -54,16 +54,21 @@ public class AvatarHelper {
         }
     }
 
-    public String getAvatarByUserId(int uid) {
+    public boolean checkCoverByGoodId(int gid) {
+        return new File(this.getClass().getClassLoader().getResource("/").getPath() +
+                "../resources/img/cover/" + gid).exists();
+    }
+
+    public String getCoverByGoodId(int gid) {
         if (new File(this.getClass().getClassLoader().getResource("/").getPath() +
-                "../resources/img/avatar/" + uid).exists()) {
-            return "/resources/img/avatar/" + uid;
+                "../resources/img/cover/" + gid).exists()) {
+            return "/resources/img/cover/" + gid;
         } else {
-            return "/resources/img/avatar/default";
+            return "/resources/img/cover/default";
         }
     }
 
-    public boolean saveAvatarBase64ByUserId(int uid, String imgEncoded) {
+    public boolean saveCoverBase64ByGoodId(int gid, String imgEncoded) {
         if (imgEncoded == null) {
             return false;
         }
@@ -82,7 +87,7 @@ public class AvatarHelper {
                 return false;
             }
             String path = this.getClass().getClassLoader().getResource("/").getPath() +
-                    "../resources/img/avatar/" + uid;
+                    "../resources/img/cover/" + gid;
             File imgFile = new File(path);
             if (imgFile.exists()) {
                 if (!imgFile.delete()) {

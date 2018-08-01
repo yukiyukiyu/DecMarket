@@ -1,5 +1,29 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $.fn.cropper();
+    $('#upload-avatar').on('click', function (e) {
+        var cropper = $('#avatarpreview').data('cropper');
+        var newAvatar = cropper.getCroppedCanvas();
+        var resized = document.createElement('canvas');
+        resized.width = 256;
+        resized.height = 256;
+        var resizedContext = resized.getContext('2d');
+        resizedContext.drawImage(newAvatar, 0, 0, 256, 256);
+        $("#avatarBase64").val(resized.toDataURL('image/png').substring(22));
+        $("#avatar-form").submit();
+    });
+    $('#submit-good').on('click', function (e) {
+        var cropper = $('#avatarpreview').data('cropper');
+        if (cropper) {
+            var newAvatar = cropper.getCroppedCanvas();
+            var resized = document.createElement('canvas');
+            resized.width = 256;
+            resized.height = 256;
+            var resizedContext = resized.getContext('2d');
+            resizedContext.drawImage(newAvatar, 0, 0, 256, 256);
+            $("#goodCoverBase64").val(resized.toDataURL('image/png').substring(22));
+        }
+        $("#good-form").submit();
+    });
 });
 
 var pngMagic = [
