@@ -121,4 +121,10 @@ public interface TransactionsMapper {
     List<Transactions> getTransByBuyerID(int buyer_id);
 
     Transactions getTranByID(int tran_id);
+
+    List<Transactions> getTransList();
+
+    void delCommentByID(int tran_id);
+
+    List<Transactions> getTransBySellerID(int seller_id);
 }

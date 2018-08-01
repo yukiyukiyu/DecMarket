@@ -51,7 +51,7 @@
                     </div>
                 </c:if>
                 <c:if test="${sessionScope.user_id != null && good.user_id != sessionScope.user_id}">
-                <form action="${pageContext.request.contextPath}/good/${good.id}/buy" method="post">
+                <form action="${pageContext.request.contextPath}/good/${good.id}/pay" method="post">
                     <c:if test="${good.count > 1}">
                     <div class="input-group">
                         <input type="number" name="count" value="1" class="form-control"

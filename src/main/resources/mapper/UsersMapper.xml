@@ -377,4 +377,19 @@
         SELECT * FROM users
     </select>
 
+    <select id="getUserByQuery" parameterType="string"
+            resultType="com.yuki.decmarket.model.Users">
+        SELECT * FROM users WHERE username LIKE "%"#{query}"%"
+    </select>
+
+    <select id="getUserByTel" parameterType="string"
+            resultType="com.yuki.decmarket.model.Users">
+        SELECT * FROM users WHERE tel = #{tel}
+    </select>
+
+    <select id="getUserByEmail" parameterType="string"
+            resultType="com.yuki.decmarket.model.Users">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
 </mapper>

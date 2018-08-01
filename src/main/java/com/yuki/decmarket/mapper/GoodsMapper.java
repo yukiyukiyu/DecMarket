@@ -122,6 +122,8 @@ public interface GoodsMapper {
 
     List<Goods> getAllGoods();
 
+    List<Goods> getQueryGoods(String query);
+
     void deleteGoodByID(int good_id);
 
     Goods getGoodByID(int good_id);

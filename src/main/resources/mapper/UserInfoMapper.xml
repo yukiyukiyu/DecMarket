@@ -415,6 +415,7 @@
       QQ = #{QQ,jdbcType=VARCHAR},
       wechat = #{wechat,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=LONGVARCHAR},
       created_at = #{created_at,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

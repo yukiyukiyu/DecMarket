@@ -3,6 +3,7 @@ package com.yuki.decmarket.controller.user;
 import com.yuki.decmarket.model.*;
 import com.yuki.decmarket.service.GoodService;
 import com.yuki.decmarket.service.UserService;
+import com.yuki.decmarket.util.AvatarHelper;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,12 +51,23 @@ public class UserController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(@Validated({NewUser.class, Default.class}) UserForm form,
 	                       BindingResult result, ModelMap modelMap) {
+		modelMap.addAttribute("oldInput", form);
+
 		if (result.hasErrors()) {
 			return "/user/register";
 		}
 
 		if (userService.getUserByUsername(form.getUsername()) != null) {
 			modelMap.addAttribute("invalidUser", "用户名已存在！");
+			return "/user/register";
+		}
+
+		if(userService.getUserByInfo(form.getTel(), 1) != null) {
+			modelMap.addAttribute("invalidTel", "该手机号已注册！");
+			return "/user/register";
+		}
+		if(userService.getUserByInfo(form.getEmail(), 2) != null) {
+			modelMap.addAttribute("invalidEmail", "该邮箱已注册！");
 			return "/user/register";
 		}
 
@@ -71,7 +83,7 @@ public class UserController {
 		newUser.setBaned(false);
 		userService.register(newUser);
 		modelMap.addAttribute("registerOK", "注册成功，请登录。");
-		return "redirect:/";
+		return "redirect:/user/loginForm";
 	}
 
 	@RequestMapping(value = "/loginForm", method = RequestMethod.GET)
@@ -91,7 +103,7 @@ public class UserController {
 			return "/user/login";
 		} else if (user.getBaned() != null && user.getBaned()) {
 			modelMap.addAttribute("banedUser",
-					"您的账号由于某些违规操作已被管理员封禁！");
+					"您的账号由于违规操作已被封禁！");
 			return "redirect:/";
 		} else {
 			if (BCrypt.checkpw(password, user.getPassword())) {
@@ -103,9 +115,9 @@ public class UserController {
 					request.getSession(true).setAttribute("nickname",
 							userService.getUserInfoByID(user.getId()).getNickname());
 
-				return "redirect:/";
+				return "redirect:/good";
 			} else {
-				modelMap.addAttribute("error", "密码错误！");
+				modelMap.addAttribute("passwdError", "密码错误！");
 				return "/user/login";
 			}
 		}
@@ -132,14 +144,18 @@ public class UserController {
 		if (!BCrypt.checkpw(oldpassword, user.getPassword()) || password.isEmpty() ||
 				repassword.isEmpty() || !password.equals(repassword)) {
 			modelMap.addAttribute("error", "修改信息错误！");
-			attributes.addFlashAttribute("user_id", user_id);
-			return "/user/editPassword";
+			return "/user/userInfo";
 		}
 
 		user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
 		userService.updateUser(user);
 		modelMap.addAttribute("okay", "密码修改成功！");
-		return "/user/editPassword";
+
+		request.getSession(true).removeAttribute("user_id");
+		request.getSession(true).removeAttribute("is_admin");
+		request.getSession(true).removeAttribute("username");
+		request.getSession(true).removeAttribute("nickname");
+		return "redirect:/user/loginForm";
 	}
 
 	@RequestMapping(value = "/{user_id}/profile", method = RequestMethod.GET)
@@ -210,6 +226,8 @@ public class UserController {
 			System.out.println(userInfo.getAddress());
 			userService.editUserInfo(userInfo);
 
+			request.getSession().setAttribute("nickname", userInfo.getNickname());
+
 			modelMap.addAttribute("okay", "修改成功！");
 		}
 
@@ -228,17 +246,60 @@ public class UserController {
 	public String getMyTrans(HttpServletRequest request) {
 		int user_id = (int) request.getSession().getAttribute("user_id");
 		List<Transactions> trans = userService.getTransByBuyerID(user_id);
-		request.setAttribute("trans", trans);
 
-		if(trans == null)
-			return "user/trans";
+		if(trans == null) return "/user/trans";
 
+		List<Transactions> buyedTrans = new ArrayList<>();
 		List<Goods> goods  = new ArrayList<>();
 		for(Transactions it : trans) {
-			goods.add(goodService.getGoodByID(it.getGood_id()));
+			if(it.getStatus() == 1) {
+				buyedTrans.add(it);
+				goods.add(goodService.getGoodByID(it.getGood_id()));
+			}
 		}
+		request.setAttribute("trans", buyedTrans);
 		request.setAttribute("goods", goods);
 		return "/user/trans";
+	}
+
+	@RequestMapping(value = "/trolley", method = RequestMethod.GET)
+	public String getTrolley(HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		List<Transactions> trans = userService.getTransByBuyerID(user_id);
+
+		if(trans == null) return "/user/trans";
+
+		List<Transactions> troTrans = new ArrayList<>();
+		List<Goods> goods = new ArrayList<>();
+		for(Transactions it : trans) {
+			if(it.getStatus() == 2) {
+				troTrans.add(it);
+				goods.add(goodService.getGoodByID(it.getGood_id()));
+			}
+		}
+		request.setAttribute("trans", troTrans);
+		request.setAttribute("goods", goods);
+		return "/user/trolley";
+	}
+
+	@RequestMapping(value = "/{tran_id}/pay", method = RequestMethod.POST)
+	public String payTrolley(@PathVariable("tran_id") int tran_id) {
+		Transactions tran = userService.getTranByID(tran_id);
+		tran.setStatus((short) 1);
+		userService.updateTran(tran);
+
+		Goods good = goodService.getGoodByID(tran.getGood_id());
+		good.setCount(good.getCount() - tran.getNumber());
+		goodService.updateGood(good);
+		return "redirect:/user/trans";
+	}
+
+	@RequestMapping(value = "/{tran_id}/delTrolley", method = RequestMethod.POST)
+	public String delTrolley(@PathVariable("tran_id") int tran_id) {
+		Transactions tran = userService.getTranByID(tran_id);
+		tran.setStatus((short) 0);
+		userService.updateTran(tran);
+		return "redirect:/user/trolley";
 	}
 
 	@RequestMapping(value = "/{tran_id}/comment", method = RequestMethod.POST)
@@ -248,6 +309,14 @@ public class UserController {
 		Transactions tran = userService.getTranByID(tran_id);
 		tran.setReason(request.getParameter("comment"));
 		userService.addTranComment(tran);
+		return "redirect:/user/trans";
+	}
+
+	@RequestMapping(value = "/{tran_id}/delComment", method = RequestMethod.POST)
+	public String delTranComment(@PathVariable("tran_id") int tran_id,
+	                             HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		userService.delTranComment(tran_id);
 		return "redirect:/user/trans";
 	}
 
@@ -290,5 +359,69 @@ public class UserController {
 			}
 		}
 		return "redirect:/user/getFavList";
+	}
+
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String admin(HttpServletRequest request) {
+		List<Users> usersList = userService.getUserList();
+		for(Users user : usersList) {
+			System.out.println(user.getId());
+		}
+		request.setAttribute("users", usersList);
+		List<Transactions> transactionsList = userService.getTransList();
+		request.setAttribute("trans", transactionsList);
+		return "/user/admin";
+	}
+
+	@RequestMapping(value = "/editTel", method = RequestMethod.POST)
+	public String editTel(HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		Users user = userService.getUserByID(user_id);
+		user.setTel(request.getParameter("newTel"));
+		userService.updateUser(user);
+		return "redirect:/user/userInfo";
+	}
+
+	@RequestMapping(value = "/editEmail", method = RequestMethod.POST)
+	public String editEmail(HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		Users user = userService.getUserByID(user_id);
+		user.setEmail(request.getParameter("newEmail"));
+		userService.updateUser(user);
+		return "redirect:/user/userInfo";
+	}
+
+	@RequestMapping(value = "/query", method = RequestMethod.POST)
+	public String query(HttpServletRequest request) {
+		String query = request.getParameter("query");
+		List<Users> users;
+		if(query.isEmpty())
+			users = userService.getUserList();
+		else
+			users = userService.getUserByQuery(query);
+		request.setAttribute("users", users);
+		List<Transactions> transactionsList = userService.getTransList();
+		request.setAttribute("trans", transactionsList);
+		return "/user/admin";
+	}
+
+	@RequestMapping(value = "/editAvatar", method = RequestMethod.POST)
+	public String editAvatar(HttpServletRequest request) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		return "redirect:/user/userInfo";
+	}
+
+	@RequestMapping(value = "/message", method = RequestMethod.GET)
+	public String message(HttpServletRequest request, ModelMap modelMap) {
+		int user_id = (int) request.getSession().getAttribute("user_id");
+		List<Transactions> trans = userService.getTransBySellerID(user_id);
+
+		if(trans == null) {
+			modelMap.addAttribute("emptyMsg", "无消息");
+			return "/user/message";
+		}
+
+		request.setAttribute("trans", trans);
+		return "/user/message";
 	}
 }

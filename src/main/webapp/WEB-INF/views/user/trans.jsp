@@ -61,7 +61,7 @@
                                     <p>
                                         <div class="card card-body">
                                             <form action="${pageContext.request.contextPath}/user/${tran.id}/comment"
-                                                  method="post" style="width:300px">
+                                                  method="post" style="width:200px">
                                                 <p><textarea name="comment" id="comment" class="form-control"
                                                             placeholder="订单评价" required="true"></textarea></p>
                                                 <div class="row">
@@ -78,9 +78,9 @@
                     </c:if>
                 </td>
                 <td>
-                    <form action="${pageContext.request.contextPath}/user/${tran.id}/delTran"
+                    <form action="${pageContext.request.contextPath}/user/${tran.id}/delComment"
                           method="post" onsubmit="return confirm('确定删除吗？');">
-                        <button type="submit" class="btn btn-danger">删除订单</button>
+                        <button type="submit" class="btn btn-danger">删除评价</button>
                     </form>
                 </td>
             </tr>
@@ -90,6 +90,8 @@
     </div>
 
 </div>
+
+<%@include file="../layout/footer.jsp"%>
 
 </body>
 </html>

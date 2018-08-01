@@ -102,4 +102,10 @@ public interface UsersMapper {
 	Users getUserByUsername(String username);
 
 	List<Users> getUserList();
+
+	List<Users> getUserByQuery(String query);
+
+	Users getUserByTel(String tel);
+
+	Users getUserByEmail(String email);
 }

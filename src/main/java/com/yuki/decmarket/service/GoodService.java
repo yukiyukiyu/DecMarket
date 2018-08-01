@@ -34,6 +34,10 @@ public class GoodService {
 		return goodsMapper.getAllGoods();
 	}
 
+	public List<Goods> getQueryGoods(String query) {
+		return goodsMapper.getQueryGoods(query);
+	}
+
 	public void addGood(Goods good) {
 		goodsMapper.insert(good);
 	}

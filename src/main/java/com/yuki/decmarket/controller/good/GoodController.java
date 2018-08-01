@@ -47,6 +47,18 @@ public class GoodController {
 		return "/good/goodList";
 	}
 
+	@RequestMapping(value = "/query", method = RequestMethod.POST)
+	public String query(HttpServletRequest request) {
+		String query = request.getParameter("query");
+		List<Goods> goods;
+		if(query.isEmpty())
+			goods = goodService.getAllGoods();
+		else
+			goods = goodService.getQueryGoods(query);
+		request.setAttribute("goods", goods);
+		return "/good/goodList";
+	}
+
 	@RequestMapping(value = "/{good_id}", method = RequestMethod.GET)
 	public String showGood(@PathVariable("good_id") int good_id, HttpServletRequest request,
 	                       ModelMap modelMap) {
@@ -94,7 +106,7 @@ public class GoodController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String addGood(@Validated({NewGood.class, Default.class}) GoodForm form,
-	                      HttpServletRequest request, ModelMap modelMap) {
+	                      HttpServletRequest request) {
 		int user_id = (int) request.getSession().getAttribute("user_id");
 		Users user = userService.getUserByID(user_id);
 		Goods newgood = beanMapper.map(form, Goods.class);
@@ -163,14 +175,28 @@ public class GoodController {
 		return "redirect:/good/" + good_id;
 	}
 
-	@RequestMapping(value = "/{good_id}/buy", method = RequestMethod.POST)
-	public String buy(@PathVariable("good_id") int good_id,
+	@RequestMapping(value = "/{good_id}/pay", method = RequestMethod.POST)
+	public String pay(@PathVariable("good_id") int good_id,
+	                  HttpServletRequest request) {
+		Goods good = goodService.getGoodByID(good_id);
+		request.setAttribute("good", good);
+		Users seller = userService.getUserByID(good.getUser_id());
+		request.setAttribute("seller", seller);
+		UserInfo sellerInfo = userService.getUserInfoByID(good.getUser_id());
+		request.setAttribute("sellerInfo", sellerInfo);
+		int count = Integer.parseInt(request.getParameter("count"));
+		request.setAttribute("count", count);
+		return "/good/payPage";
+	}
+
+	@RequestMapping(value = "/{good_id}/buy/{count}", method = RequestMethod.POST)
+	public String buy(@PathVariable("good_id") int good_id, @PathVariable("count") int count,
 	                  HttpServletRequest request) {
 		int buyer_id = (int) request.getSession().getAttribute("user_id");
 		Transactions transaction = new Transactions();
 		transaction.setGood_id(good_id);
 		transaction.setBuyer_id(buyer_id);
-		transaction.setNumber(Integer.parseInt(request.getParameter("count")));
+		transaction.setNumber(count);
 		transaction.setStatus((short) 1);
 		goodService.addTrans(transaction);
 
@@ -178,5 +204,43 @@ public class GoodController {
 		good.setCount(good.getCount() - transaction.getNumber());
 		goodService.updateGood(good);
 		return "redirect:/user/trans";
+	}
+
+	@RequestMapping(value = "/{good_id}/addTrolley/{count}", method = RequestMethod.POST)
+	public String addTrolley(@PathVariable("good_id") int good_id, @PathVariable("count") int count,
+	                         HttpServletRequest request) {
+		int buyer_id = (int) request.getSession().getAttribute("user_id");
+		Transactions transaction = new Transactions();
+		transaction.setGood_id(good_id);
+		transaction.setBuyer_id(buyer_id);
+		transaction.setNumber(count);
+		transaction.setStatus((short) 2);
+		goodService.addTrans(transaction);
+
+		return "redirect:/user/trolley";
+	}
+
+	@RequestMapping(value = "/{good_id}/edit", method = RequestMethod.GET)
+	public String editGood(@PathVariable("good_id") int good_id,
+	                       HttpServletRequest request) {
+		Goods good = goodService.getGoodByID(good_id);
+		System.out.println(good.getPrice());
+		System.out.println(good.getCount());
+		request.setAttribute("good", good);
+		return "/good/addGoodForm";
+	}
+
+	@RequestMapping(value = "/{good_id}/editMethod/{user_id}", method = RequestMethod.POST)
+	public String addGood(@Validated({NewGood.class, Default.class}) GoodForm form,
+	                      HttpServletRequest request,
+	                      @PathVariable("good_id") int good_id,
+	                      @PathVariable("user_id") int user_id) {
+		Goods editgood = beanMapper.map(form, Goods.class);
+		System.out.println("Below are edit test:");
+		System.out.println(editgood.getDescription());
+		editgood.setUser_id(user_id);
+		editgood.setId(good_id);
+		goodService.updateGood(editgood);
+		return "redirect:/good/" + good_id;
 	}
 }

@@ -25,7 +25,9 @@
             <div class="row" style="margin-bottom:10px">
                 <div class="col-md-7 col-sm-12">
                     <figure class="figure">
-                        <img src="${pageContext.request.contextPath}/resources/img/icon.png"
+                        <% String avatarPath = new AvatarHelper().getAvatarByUserId(Integer.parseInt(
+                                session.getAttribute("user_id").toString())); %>
+                        <img src="<%=avatarPath%>"
                              style="width:150px; height:150px; border-radius:50%; overflow:hidden;margin-bottom:10px" />
                         <figcaption class="figure-caption text-center">
                             <c:if test="${userInfo.nickname != null}">
@@ -105,6 +107,8 @@
     </div>
 
 </div>
+
+<%@include file="../layout/footer.jsp"%>
 
 </body>
 </html>

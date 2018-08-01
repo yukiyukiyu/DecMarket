@@ -41,6 +41,10 @@ public class UserService {
 		return usersMapper.getUserList();
 	}
 
+	public List<Users> getUserByQuery(String query) {
+		return usersMapper.getUserByQuery(query);
+	}
+
 	@Transactional
 	public void register(Users user) {
 		usersMapper.insert(user);
@@ -71,6 +75,10 @@ public class UserService {
 		return transactionsMapper.getTransByBuyerID(buyer_id);
 	}
 
+	public List<Transactions> getTransBySellerID(int seller_id) {
+		return transactionsMapper.getTransBySellerID(seller_id);
+	}
+
 	public void createUserInfo(UserInfo userInfo) {
 		userInfoMapper.insert(userInfo);
 	}
@@ -91,4 +99,22 @@ public class UserService {
 		transactionsMapper.updateByPrimaryKey(tran);
 	}
 
+	public void delTranComment(int tran_id) {
+		transactionsMapper.delCommentByID(tran_id);
+	}
+
+	public List<Transactions> getTransList() {
+		return transactionsMapper.getTransList();
+	}
+
+	public Users getUserByInfo(String info, int flag) {
+		if(flag == 1)
+			return usersMapper.getUserByTel(info);
+		else
+			return usersMapper.getUserByEmail(info);
+	}
+
+	public void updateTran(Transactions tran) {
+		transactionsMapper.updateByPrimaryKey(tran);
+	}
 }

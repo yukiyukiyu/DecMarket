@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+    <%@ page import="com.yuki.decmarket.util.AvatarHelper" %>
+        <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="banner"><div class="banner-back"></div></div>
@@ -16,7 +17,10 @@
                 <a href="${pageContext.request.contextPath}/user/registerForm" class="dropdown-item">注册</a>
             </c:if>
             <c:if test="${sessionScope.user_id != null}">
+                    <% String avatarPath = new AvatarHelper().getAvatarByUserId(Integer.parseInt(
+                                            session.getAttribute("user_id").toString())); %>
                 <a href="${pageContext.request.contextPath}/user/${sessionScope.user_id}/profile" class="dropdown-item">
+                    <center><img class="avatar" src="<%=avatarPath%>"></center>
                     <c:if test="${sessionScope.nickname != null}">
                         <label class="dropdown-header">${sessionScope.nickname}</label>
                     </c:if>
@@ -27,14 +31,15 @@
                 <a href="${pageContext.request.contextPath}/user/logout" class="dropdown-item bg-danger text-light">登出</a>
                 <div class="dropdown-divider"></div>
                 <a href="${pageContext.request.contextPath}/user/userInfo" class="dropdown-item">个人中心</a>
+                <a href="${pageContext.request.contextPath}/user/trolley" class="dropdown-item">购物车</a>
                 <a href="${pageContext.request.contextPath}/user/getFavList" class="dropdown-item">收藏夹</a>
                 <a href="${pageContext.request.contextPath}/user/trans" class="dropdown-item">我的购买</a>
                 <a href="${pageContext.request.contextPath}/user/${sessionScope.user_id}/sell" class="dropdown-item">我的出售</a>
                 <c:if test="${sessionScope.is_admin >= 1}">
-                    <a href="${pageContext.request.contextPath}/admin" class="dropdown-item">管理中心</a>
+                    <a href="${pageContext.request.contextPath}/user/admin" class="dropdown-item">管理中心</a>
                 </c:if>
                 <div class="dropdown-divider"></div>
-                <a href="${pageContext.request.contextPath}/message" class="dropdown-item">消息</a>
+                <a href="${pageContext.request.contextPath}/user/message" class="dropdown-item">消息</a>
                 <a href="${pageContext.request.contextPath}/good/add" class="dropdown-item">出售</a>
             </c:if>
             </div>
@@ -52,27 +57,32 @@
             </c:if>
             <c:if test="${sessionScope.user_id != null}">
                 <li class="nav-item dropdown">
-                    <a class="nav-link navbar-avatar nav-btn" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <% String avatarPath = new AvatarHelper().getAvatarByUserId(Integer.parseInt(
+                                            session.getAttribute("user_id").toString())); %>
+                    <a class="nav-link navbar-avatar nav-btn" href="#" data-toggle="dropdown" role="button"
+                        aria-haspopup="true" aria-expanded="false">
+                        <img src="<%=avatarPath%>" class="avatar" style="height:40px;width:40px;"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
                         <c:if test="${sessionScope.nickname != null}">
                             <label class="dropdown-header">${sessionScope.nickname}</label>
                         </c:if>
                         <c:if test="${sessionScope.nickname == null}">
                             <label class="dropdown-header">${sessionScope.username}</label>
                         </c:if>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
                         <a href="${pageContext.request.contextPath}/user/userInfo" class="dropdown-item">个人中心</a>
+                        <a href="${pageContext.request.contextPath}/user/trolley" class="dropdown-item">购物车</a>
                         <a href="${pageContext.request.contextPath}/user/getFavList" class="dropdown-item">收藏夹</a>
-                        <a href="${pageContext.request.contextPath}/user/trans" class="dropdown-item">我的购买</a>
+                        <a href="${pageContext.request.contextPath}/user/trans" class="dropdown-item">我的订单</a>
                         <a href="${pageContext.request.contextPath}/user/${sessionScope.user_id}/sell" class="dropdown-item">我的出售</a>
                         <c:if test="${sessionScope.is_admin >= 1}">
-                            <a href="${pageContext.request.contextPath}/admin" class="dropdown-item">管理中心</a>
+                            <a href="${pageContext.request.contextPath}/user/admin" class="dropdown-item">管理中心</a>
                         </c:if>
                         <div class="dropdown-divider"></div>
                         <a href="${pageContext.request.contextPath}/user/logout" class="dropdown-item bg-danger text-light">登出</a>
                     </div>
                 </li>
-                <li class="nav-item"><a href="${pageContext.request.contextPath}/message" class="nav-link nav-btn">消息</a></li>
+                <li class="nav-item"><a href="${pageContext.request.contextPath}/user/message" class="nav-link nav-btn">消息</a></li>
                 <li class="nav-item"><a href="${pageContext.request.contextPath}/good/addGoodForm" class="nav-link nav-btn">出售</a></li>
             </c:if>
             </ul>
@@ -89,11 +99,11 @@
         </div>
         <div class="col col-md-4 col-lg-3 ml-auto">
             <img src="${pageContext.request.contextPath}/resources/img/icon.png" class="banner-icon"/>
-            <form action="${pageContext.request.contextPath}/good" method="GET">
-            <div class="input-group">
-                <input class="form-control" name="query" id="searchq" placeholder="开始交易吧 OwO"/>
-                <span class="input-group-btn"><input type="submit" class="btn btn-warning" value="G♂"></span>
-            </div>
+            <form action="${pageContext.request.contextPath}/good/query" method="post">
+                <div class="input-group">
+                    <input class="form-control" name="query" id="searchq" placeholder="开始交易吧 OwO"/>
+                    <span class="input-group-btn"><input type="submit" class="btn btn-warning" value="G♂"></span>
+                </div>
             </form>
         </div>
     </div>

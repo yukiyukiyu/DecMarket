@@ -399,7 +399,8 @@
       price = #{price,jdbcType=DOUBLE},
       count = #{count,jdbcType=INTEGER},
       deleted_at = #{deleted_at,jdbcType=TIMESTAMP},
-      created_at = #{created_at,jdbcType=TIMESTAMP}
+      created_at = #{created_at,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -415,6 +416,11 @@
 
     <select id="getAllGoods" resultType="com.yuki.decmarket.model.Goods">
         SELECT * FROM goods WHERE deleted_at IS NULL
+    </select>
+
+    <select id="getQueryGoods" parameterType="string"
+            resultType="com.yuki.decmarket.model.Goods">
+        SELECT * FROM goods WHERE name LIKE "%"#{query}"%"
     </select>
 
     <update id="deleteGoodByID" parameterType="int">

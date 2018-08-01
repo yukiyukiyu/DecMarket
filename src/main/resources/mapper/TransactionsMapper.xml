@@ -400,4 +400,19 @@
             resultType="com.yuki.decmarket.model.Transactions">
         SELECT * FROM transactions WHERE id = #{tran_id}
     </select>
+
+    <select id="getTransList" resultType="com.yuki.decmarket.model.Transactions">
+        SELECT * FROM transactions ORDER BY id DESC
+    </select>
+
+    <update id="delCommentByID" parameterType="int">
+        UPDATE transactions SET reason = NULL WHERE id = #{tran_id}
+    </update>
+
+    <select id="getTransBySellerID" parameterType="int"
+            resultType="com.yuki.decmarket.model.Transactions">
+        SELECT transactions.* FROM transactions, goods WHERE goods.user_id = #{seller_id}
+          AND transactions.good_id = goods.id AND transactions.status = 1
+          ORDER BY transactions.id DESC
+    </select>
 </mapper>
