@@ -48,18 +48,24 @@
                 <div class="col-md-5 col-sm-12" id="profile_bt">
                     <c:if test="${sessionScope.is_admin == 2 && user.baned == false}">
                         <c:if test="${user.privilege == 0}">
-                            <form action="${pageContext.request.contextPath}/user/${user.id}/setadmin" method="post">
+                            <form action="${pageContext.request.contextPath}/user/${user.id}/setAdmin" method="post">
                                 <input type="submit" value="设置管理员" class="btn btn-info">
                             </form>
                         </c:if>
                         <c:if test="${user.privilege == 1}">
-                            <form action="${pageContext.request.contextPath}/user/${user.id}/removeadmin" method="post">
+                            <form action="${pageContext.request.contextPath}/user/${user.id}/removeAdmin" method="post">
                                 <input type="submit" value="解除管理员" class="btn btn-danger">
                             </form>
                         </c:if>
                         <form action="${pageContext.request.contextPath}/user/${user.id}/ban" method="post"
                               style="position:absolute;bottom:0px">
                             <input type="submit" class="btn btn-danger" value="封禁该用户">
+                        </form>
+                    </c:if>
+                    <c:if test="${sessionScope.is_admin >= 1 && user.baned == true}">
+                        <form action="${pageContext.request.contextPath}/user/${user.id}/removeBan" method="post"
+                              style="position:absolute;bottom:0px">
+                            <input type="submit" class="btn btn-primary" value="解除封禁">
                         </form>
                     </c:if>
                 </div>

@@ -61,4 +61,8 @@ public class GoodService {
 	public void updateGood(Goods good) {
 		goodsMapper.updateByPrimaryKey(good);
 	}
+
+	public List<Transactions> getTransByGoodID(int good_id) {
+		return transactionsMapper.getTransByGoodID(good_id);
+	}
 }

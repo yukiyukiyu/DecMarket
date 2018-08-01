@@ -32,8 +32,8 @@
                         <div class="input-group">
                             <input class="form-control" name="query" id="searchq" placeholder="输入用户名查询"/>
                             <span class="input-group-btn"><input type="submit" class="btn btn-warning" value="G♂"></span>
-            </div>
-            </form>
+                        </div>
+                    </form>
                     <thead>
                         <tr>
                             <th>#</th>

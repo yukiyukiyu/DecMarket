@@ -96,6 +96,9 @@ public class GoodController {
 				}
 			}
 		}
+
+		List<Transactions> trans = goodService.getTransByGoodID(good_id);
+		request.setAttribute("trans", trans);
 		return "/good/goodInfo";
 	}
 

@@ -104,7 +104,7 @@ public class UserController {
 		} else if (user.getBaned() != null && user.getBaned()) {
 			modelMap.addAttribute("banedUser",
 					"您的账号由于违规操作已被封禁！");
-			return "redirect:/";
+			return "/user/login";
 		} else {
 			if (BCrypt.checkpw(password, user.getPassword())) {
 				request.getSession(true).setAttribute("user_id", user.getId());
@@ -371,6 +371,38 @@ public class UserController {
 		List<Transactions> transactionsList = userService.getTransList();
 		request.setAttribute("trans", transactionsList);
 		return "/user/admin";
+	}
+
+	@RequestMapping(value = "/{user_id}/setAdmin", method = RequestMethod.POST)
+	public String setAdmin(@PathVariable("user_id") int user_id) {
+		Users user = userService.getUserByID(user_id);
+		user.setPrivilege((byte) 1);
+		userService.updateUser(user);
+		return "redirect:/user/" + user_id + "/profile";
+	}
+
+	@RequestMapping(value = "/{user_id}/removeAdmin", method = RequestMethod.POST)
+	public String removeAdmin(@PathVariable("user_id") int user_id) {
+		Users user = userService.getUserByID(user_id);
+		user.setPrivilege((byte) 0);
+		userService.updateUser(user);
+		return "redirect:/user/" + user_id + "/profile";
+	}
+
+	@RequestMapping(value = "/{user_id}/ban", method = RequestMethod.POST)
+	public String banUser(@PathVariable("user_id") int user_id) {
+		Users user = userService.getUserByID(user_id);
+		user.setBaned(true);
+		userService.updateUser(user);
+		return "redirect:/user/" + user_id + "/profile";
+	}
+
+	@RequestMapping(value = "/{user_id}/removeBan", method = RequestMethod.POST)
+	public String removeBan(@PathVariable("user_id") int user_id) {
+		Users user = userService.getUserByID(user_id);
+		user.setBaned(false);
+		userService.updateUser(user);
+		return "redirect:/user/" + user_id + "/profile";
 	}
 
 	@RequestMapping(value = "/editTel", method = RequestMethod.POST)

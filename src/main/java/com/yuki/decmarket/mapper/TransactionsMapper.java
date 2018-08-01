@@ -1,5 +1,6 @@
 package com.yuki.decmarket.mapper;
 
+import com.sun.org.apache.bcel.internal.generic.LUSHR;
 import com.yuki.decmarket.model.Transactions;
 import com.yuki.decmarket.model.TransactionsExample;
 import java.util.List;
@@ -127,4 +128,6 @@ public interface TransactionsMapper {
     void delCommentByID(int tran_id);
 
     List<Transactions> getTransBySellerID(int seller_id);
+
+    List<Transactions> getTransByGoodID(int good_id);
 }

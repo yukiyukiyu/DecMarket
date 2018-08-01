@@ -46,12 +46,12 @@
                     <form action="${pageContext.request.contextPath}/user/${tran.id}/pay"
                           method="post" style="display: inline-block;">
                         <button class="btn btn-primary" type="button" data-toggle="collapse"
-                                data-target="#pay-form" aria-expanded="false" aria-controls="add-form">
+                                data-target="#pay-form${tran.id}" aria-expanded="false" aria-controls="add-form">
                             <span class="fa fa-plus"> 立即付款</span>
                         </button>
                         <div class="row">
                             <div class="mx-auto">
-                                <div class="collapse" id="pay-form">
+                                <div class="collapse" id="pay-form${tran.id}">
                                     <center>
                                         <p></p>
                                         <h4>请使用支付宝扫描此二维码进行付款</h4><br/>

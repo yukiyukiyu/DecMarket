@@ -415,4 +415,9 @@
           AND transactions.good_id = goods.id AND transactions.status = 1
           ORDER BY transactions.id DESC
     </select>
+
+    <select id="getTransByGoodID" parameterType="int"
+            resultType="com.yuki.decmarket.model.Transactions">
+        SELECT * FROM transactions WHERE good_id = #{good_id}
+    </select>
 </mapper>

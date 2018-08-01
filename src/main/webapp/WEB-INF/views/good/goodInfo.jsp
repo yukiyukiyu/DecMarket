@@ -24,8 +24,47 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                    <div class="card-header">商品介绍</div>
-                    <div class="card-body">${good.description}</div>
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" role="tab-list">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#description" role="tab" data-toggle="tab"
+                                   aria-controls="description">商品描述</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#comment" role="tab" data-toggle="tab"
+                                   aria-controls="description">历史评价</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content card-body">
+                        <div class="tab-pane active" id="description" role="tabpanel">
+                            ${good.description}
+                        </div>
+                        <div class="tab-pane" id="comment" role="tabpanel">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>买家编号</th>
+                                        <th>评价</th>
+                                        <th>交易时间</th>
+                                    </tr>
+                                </thead>
+                                <c:forEach items="${trans}" var="tran">
+                                    <c:if test="${tran.reason != null}">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a href="${pageContext.request.contextPath}/user/${tran.buyer_id}/profile">
+                                                        ${tran.buyer_id}</a></td>
+                                            <td>${tran.reason}</td>
+                                            <td>${tran.created_at}</td>
+                                        </tr>
+                                    </tbody>
+                                    </c:if>
+                                </c:forEach>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
