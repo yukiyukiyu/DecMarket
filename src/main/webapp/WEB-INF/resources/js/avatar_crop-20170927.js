@@ -20,11 +20,11 @@ function preview(file) {
         prreader.onload = function (evt) {
             var fileBuf = new Uint8Array(evt.target.result.slice(0, 11));
             var mime = isImage(fileBuf);
-                if (mime == null) {
+            if (mime == null) {
                 alert("文件格式有误，请打开图片文件!");
                 return;
-                } else {
-            reader.readAsDataURL(file.files[0]);
+            } else {
+                reader.readAsDataURL(file.files[0]);
             }
         };
         prreader.readAsArrayBuffer(file.files[0]);
